@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Seller Registration</title>
+</head>
+<body>
+	<h1>Seller Registration</h1>
+
+	<form action="/seller/register" method="post" th:object="${seller}">
+		Name: <input type="text" name="name" th:value="*{name}"> <span th:errors="*{name}"></span> <br> Mobile: <input
+			type="number" name="mobile" th:value="*{mobile}"><span th:errors="*{mobile}"></span> <br> Email: <input
+			type="text" name="email" th:value="*{email}"><span th:errors="*{email}"></span> <br> Password: <input
+			type="text" name="password" th:value="*{password}"><span th:errors="*{password}"></span> <br> Confirm Password: <input
+			type="text" name="confirmpassword" th:value="*{confirmpassword}"><span th:errors="*{confirmpassword}"></span> <br> Address:
+		<textarea rows="5" cols="30" name="address" th:value="*{address}"></textarea><span th:errors="*{address}"></span>
+		<br>
+		<button>Register</button>
+	</form>
+</body>
+</html>
