@@ -5,10 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.s13sh.ecommerce.dto.Seller;
+import com.s13sh.ecommerce.service.SellerService;
 
 import jakarta.validation.Valid;
 
@@ -17,21 +20,21 @@ import jakarta.validation.Valid;
 public class SellerController {
 	
 	@Autowired
-	Seller seller;
+	SellerService sellerService;
 
 	@GetMapping("/register")
 	public String loadRegister(ModelMap map) {
-		map.put("seller",seller);
-		return "seller-register.html";
+		return sellerService.loadRegister(map);
 	}
 	
 	@PostMapping("/register")
-	public String register(@Valid Seller seller,BindingResult result) {
+	public String register(@Valid Seller seller,BindingResult result,ModelMap map) {
+		return sellerService.loadRegister(seller,result,map);
+	}
 	
-		if(result.hasErrors())
-			return "seller-register.html";
-		else
-			return "redirect:https://www.youtube.com";
+	@PostMapping("/submit-otp/{id}")
+	public String submitOtp(@PathVariable int id,@RequestParam int otp,ModelMap map) {
+		return sellerService.submitOtp(id,otp,map);
 	}
 	
 }

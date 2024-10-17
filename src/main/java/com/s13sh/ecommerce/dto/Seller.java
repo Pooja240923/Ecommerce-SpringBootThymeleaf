@@ -40,4 +40,5 @@ public class Seller {
 	@Size(min = 6, max = 150, message = "* Enter between 6~150 characters")
 	private String address;
 	private boolean verified;
+	private int otp;
 }
