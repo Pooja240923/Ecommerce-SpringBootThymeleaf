@@ -12,6 +12,8 @@ import com.s13sh.ecommerce.helper.MyEmailSender;
 import com.s13sh.ecommerce.repository.SellerRepository;
 import com.s13sh.ecommerce.service.SellerService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class SellerServiceImpl implements SellerService {
 
@@ -31,7 +33,7 @@ public class SellerServiceImpl implements SellerService {
 	}
 
 	@Override
-	public String loadRegister(Seller seller, BindingResult result,ModelMap map) {
+	public String loadRegister(Seller seller, BindingResult result,HttpSession session) {
 		if (!seller.getPassword().equals(seller.getConfirmpassword()))
 			result.rejectValue("confirmpassword", "error.confirmpassword", "* Password Missmatch");
 		if (sellerRepository.existsByEmail(seller.getEmail()))
@@ -46,24 +48,26 @@ public class SellerServiceImpl implements SellerService {
 			seller.setOtp(otp);
 			sellerRepository.save(seller);
 			emailSender.sendOtp(seller);
-			map.put("id", seller.getId());
-			return "seller-otp.html";
+			
+			session.setAttribute("success", "Otp Sent Success");
+			session.setAttribute("id", seller.getId());
+			return "redirect:/seller/otp";
 		}
 	}
 
 	@Override
-	public String submitOtp(int id, int otp, ModelMap map) {
+	public String submitOtp(int id, int otp, HttpSession session) {
 		Seller seller=sellerRepository.findById(id).orElseThrow();
 		if(seller.getOtp()==otp) {
 			seller.setVerified(true);
 			sellerRepository.save(seller);
-			map.put("success", "Account Created Success");
-			return "home.html";
+			session.setAttribute("success", "Account Created Success");
+			return "redirect:/";
 		}
 		else {
-			map.put("failure", "Invalid OTP");
-			map.put("id", seller.getId());
-			return "seller-otp.html";
+			session.setAttribute("failure", "Invalid OTP");
+			session.setAttribute("id", seller.getId());
+			return "redirect:/seller/otp";
 		}
 	}
 

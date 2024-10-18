@@ -1,21 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Seller Registration</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Seller Registration</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			line-height: 1.6;
+			margin: 0;
+			padding: 20px;
+			background-color: #f4f4f4;
+		}
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		h1 {
+			text-align: center;
+			color: #333;
+		}
+		form {
+			display: flex;
+			flex-direction: column;
+		}
+		.form-group {
+			margin-bottom: 15px;
+		}
+		label {
+			font-weight: bold;
+			margin-bottom: 5px;
+			display: block;
+		}
+		input, textarea {
+			width: 100%;
+			padding: 8px;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		textarea {
+			resize: vertical;
+		}
+		.error {
+			color: #ff0000;
+			font-size: 0.9em;
+			margin-top: 5px;
+		}
+		button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		button:hover {
+			background-color: #45a049;
+		}
+	</style>
 </head>
 <body>
-	<h1>Seller Registration</h1>
+	<div class="container">
+		<h1>Seller Registration</h1>
 
-	<form action="/seller/register" method="post" th:object="${seller}">
-		Name: <input type="text" name="name" th:value="*{name}"> <span th:errors="*{name}"></span> <br> Mobile: <input
-			type="number" name="mobile" th:value="*{mobile}"><span th:errors="*{mobile}"></span> <br> Email: <input
-			type="text" name="email" th:value="*{email}"><span th:errors="*{email}"></span> <br> Password: <input
-			type="text" name="password" th:value="*{password}"><span th:errors="*{password}"></span> <br> Confirm Password: <input
-			type="text" name="confirmpassword" th:value="*{confirmpassword}"><span th:errors="*{confirmpassword}"></span> <br> Address:
-		<textarea rows="5" cols="30" name="address" th:value="*{address}"></textarea><span th:errors="*{address}"></span>
-		<br>
-		<button>Register</button>
-	</form>
+		<form action="/seller/register" method="post" th:object="${seller}">
+			<div class="form-group">
+				<label for="name">Name:</label>
+				<input type="text" id="name" name="name" th:value="*{name}">
+				<span class="error" th:errors="*{name}"></span>
+			</div>
+			<div class="form-group">
+				<label for="mobile">Mobile:</label>
+				<input type="tel" id="mobile" name="mobile" th:value="*{mobile}">
+				<span class="error" th:errors="*{mobile}"></span>
+			</div>
+			<div class="form-group">
+				<label for="email">Email:</label>
+				<input type="email" id="email" name="email" th:value="*{email}">
+				<span class="error" th:errors="*{email}"></span>
+			</div>
+			<div class="form-group">
+				<label for="password">Password:</label>
+				<input type="password" id="password" name="password" th:value="*{password}">
+				<span class="error" th:errors="*{password}"></span>
+			</div>
+			<div class="form-group">
+				<label for="confirmpassword">Confirm Password:</label>
+				<input type="password" id="confirmpassword" name="confirmpassword" th:value="*{confirmpassword}">
+				<span class="error" th:errors="*{confirmpassword}"></span>
+			</div>
+			<div class="form-group">
+				<label for="address">Address:</label>
+				<textarea id="address" name="address" rows="5" th:text="*{address}"></textarea>
+				<span class="error" th:errors="*{address}"></span>
+			</div>
+			<button type="submit">Register</button>
+		</form>
+	</div>
 </body>
 </html>

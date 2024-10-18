@@ -1,14 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Home</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home - Ecommerce Store</title>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h3 th:text="${success}"></h3>
-	<a href="/"><button>Home</button></a>
-	<a href="/"><button>Products</button></a>
-	<a href="/"><button>Login</button></a>
-	<a href="/customer/register"><button>Register</button></a>
+	<header>
+		<nav>
+			<div class="logo">Ecommerce Store</div>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/">Products</a></li>
+				<li><a href="/">Login</a></li>
+				<li><a href="/customer/register">Register</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<h3 th:text="${session.failure}"></h3>
+		<h3 th:text="${session.success}"></h3>
+		<h3 th:text="${@sessionMessageRemover.removeMessage()}"></h3>
+
+		<h1>Welcome to our Ecommerce Store</h1>
+		<p>Find the best products at great prices!</p>
+	</main>
+
+	<footer>
+		<p>© 2023 Ecommerce Store. All rights reserved.</p>
+	</footer>
 </body>
 </html>
