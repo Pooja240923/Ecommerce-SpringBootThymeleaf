@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
 import com.s13sh.ecommerce.dto.Seller;
+import com.s13sh.ecommerce.helper.AES;
 import com.s13sh.ecommerce.helper.MyEmailSender;
 import com.s13sh.ecommerce.repository.SellerRepository;
 import com.s13sh.ecommerce.service.SellerService;
@@ -46,6 +47,7 @@ public class SellerServiceImpl implements SellerService {
 		else {
 			int otp = new Random().nextInt(100000, 1000000);
 			seller.setOtp(otp);
+			seller.setPassword(AES.encrypt(seller.getPassword(), "123"));
 			sellerRepository.save(seller);
 			emailSender.sendOtp(seller);
 			
