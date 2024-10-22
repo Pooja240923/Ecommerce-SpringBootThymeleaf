@@ -43,4 +43,14 @@ public class SellerController {
 		return sellerService.submitOtp(id,otp,session);
 	}
 	
+	@GetMapping("/home")
+	public String loadHome(HttpSession session) {
+		if (session.getAttribute("seller") != null)
+			return "seller-home.html";
+		else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/login";
+		}
+	}
+	
 }

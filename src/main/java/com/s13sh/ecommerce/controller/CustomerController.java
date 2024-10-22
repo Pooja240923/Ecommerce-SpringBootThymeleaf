@@ -42,4 +42,14 @@ public class CustomerController {
 	public String submitOtp(@PathVariable int id, @RequestParam int otp, HttpSession session) {
 		return customerService.submitOtp(id, otp, session);
 	}
+	
+	@GetMapping("/home")
+	public String loadHome(HttpSession session) {
+		if (session.getAttribute("customer") != null)
+			return "customer-home.html";
+		else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/login";
+		}
+	}
 }
