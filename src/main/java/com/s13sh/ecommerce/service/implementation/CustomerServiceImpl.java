@@ -7,74 +7,77 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
+import com.s13sh.ecommerce.dto.Customer;
 import com.s13sh.ecommerce.dto.Seller;
 import com.s13sh.ecommerce.helper.AES;
 import com.s13sh.ecommerce.helper.MyEmailSender;
 import com.s13sh.ecommerce.repository.CustomerRepository;
 import com.s13sh.ecommerce.repository.SellerRepository;
-import com.s13sh.ecommerce.service.SellerService;
+import com.s13sh.ecommerce.service.CustomerService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Service
-public class SellerServiceImpl implements SellerService {
+public class CustomerServiceImpl implements CustomerService{
 
 	@Autowired
-	Seller seller;
-
+	Customer customer;
+	
 	@Autowired
 	MyEmailSender emailSender;
-
-	@Autowired
-	SellerRepository sellerRepository;
 	
 	@Autowired
 	CustomerRepository customerRepository;
+	
+	@Autowired
+	SellerRepository sellerRepository;
 
 	@Override
 	public String loadRegister(ModelMap map) {
-		map.put("seller", seller);
-		return "seller-register.html";
+		map.put("customer", customer);
+		return "customer-register.html";
 	}
 
 	@Override
-	public String loadRegister(Seller seller, BindingResult result,HttpSession session) {
-		if (!seller.getPassword().equals(seller.getConfirmpassword()))
+	public String loadRegister(@Valid Customer customer, BindingResult result, HttpSession session) {
+		if (!customer.getPassword().equals(customer.getConfirmpassword()))
 			result.rejectValue("confirmpassword", "error.confirmpassword", "* Password Missmatch");
-		if (customerRepository.existsByEmail(seller.getEmail()) || sellerRepository.existsByEmail(seller.getEmail()))
+		if (customerRepository.existsByEmail(customer.getEmail()) || sellerRepository.existsByEmail(customer.getEmail()))
 			result.rejectValue("email", "error.email", "* Email should be Unique");
-		if (customerRepository.existsByMobile(seller.getMobile()) || sellerRepository.existsByMobile(seller.getMobile()))
+		if (customerRepository.existsByMobile(customer.getMobile()) || sellerRepository.existsByMobile(customer.getMobile()))
 			result.rejectValue("mobile", "error.mobile", "* Mobile Number should be Unique");
 
 		if (result.hasErrors())
-			return "seller-register.html";
+			return "customer-register.html";
 		else {
 			int otp = new Random().nextInt(100000, 1000000);
-			seller.setOtp(otp);
-			seller.setPassword(AES.encrypt(seller.getPassword(), "123"));
-			sellerRepository.save(seller);
-			emailSender.sendOtp(seller);
+			customer.setOtp(otp);
+			customer.setPassword(AES.encrypt(customer.getPassword(), "123"));
+			customerRepository.save(customer);
+			emailSender.sendOtp(customer);
 			
 			session.setAttribute("success", "Otp Sent Success");
-			session.setAttribute("id", seller.getId());
-			return "redirect:/seller/otp";
+			session.setAttribute("id", customer.getId());
+			return "redirect:/customer/otp";
 		}
 	}
 
 	@Override
 	public String submitOtp(int id, int otp, HttpSession session) {
-		Seller seller=sellerRepository.findById(id).orElseThrow();
-		if(seller.getOtp()==otp) {
-			seller.setVerified(true);
-			sellerRepository.save(seller);
+		Customer customer=customerRepository.findById(id).orElseThrow();
+		if(customer.getOtp()==otp) {
+			customer.setVerified(true);
+			customerRepository.save(customer);
 			session.setAttribute("success", "Account Created Success");
 			return "redirect:/";
 		}
 		else {
 			session.setAttribute("failure", "Invalid OTP");
-			session.setAttribute("id", seller.getId());
-			return "redirect:/seller/otp";
+			session.setAttribute("id", customer.getId());
+			return "redirect:/customer/otp";
 		}
 	}
-
+	
+	
 }
